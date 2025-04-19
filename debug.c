@@ -4,7 +4,10 @@
 #include <stdio.h>
 
 static int constantInstruction(Chunk *chunk, const char *instructionName, int offset) {
-	printf("%s %d\n", instructionName, chunk->code[offset+1]);
+	uint8_t constant = chunk->code[offset + 1];
+	printf("%-16s %4d '", instructionName, constant);
+	printValue(chunk->constants.values[constant]);
+	printf("'\n");
 	return offset + 2;
 }
 
@@ -33,4 +36,8 @@ int disassembleInstruction(Chunk *chunk, int offset) {
 		printf("Unknown Opcode\n");
 		return offset + 1;
 	}
+}
+
+void printValue(Value value) {
+	printf("%g", value);
 }

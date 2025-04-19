@@ -21,7 +21,7 @@ int main() {
 	writeChunk(&chunk, OP_RETURN);
 
 	writeChunk(&chunk, OP_CONSTANT);
-	writeChunk(&chunk, 10);
+	writeChunk(&chunk, addConstant(&chunk, 1.2));
 
 	disassembleChunk(&chunk, "test opcode");
 
