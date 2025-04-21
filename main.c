@@ -9,6 +9,15 @@
 	RETURN_OP takes 1 byte RETURN_OP
 	CONSTANT_OP takes 2 bytes CONSTANT_OP <CONSTANT>
 
+	256 -> 0 0 0 0 0 0 0 0
+
+	uint32_t x = 1031;
+	uint32_t x1 = x >> 16 & 0xFF;
+	uint32_t x2 = x >> 8 & 0xFF;
+	uint32_t x3 = x & 0xFF;
+
+	uint32_t reconstructed = (((uint32_t)x1 << 16) | ((uint32_t)x2 << 8) | (uint32_t)x3);
+	printf("%u %u %u %d\n", x1, x2, x3, reconstructed);
 
 
 	function declarations are in *.h files
@@ -18,10 +27,16 @@
 int main() {
 	Chunk chunk;
 	initChunk(&chunk);
-	writeChunk(&chunk, OP_RETURN);
 
-	writeChunk(&chunk, OP_CONSTANT);
-	writeChunk(&chunk, addConstant(&chunk, 1.2));
+	writeChunk(&chunk, OP_CONSTANT, 1);
+	writeChunk(&chunk, addConstant(&chunk, 1.4), 1);
+
+	for (int t=0;t<799;t++) {
+		writeChunk(&chunk, OP_CONSTANT_LONG, 1);
+		writeConstant(&chunk, t, 1);
+	}
+
+	writeChunk(&chunk, OP_RETURN, 1);
 
 	disassembleChunk(&chunk, "test opcode");
 
