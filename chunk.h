@@ -2,6 +2,7 @@
 #define bytecompiler_chunk
 
 #include "common.h"
+#include "memory.h"
 #include "value.h"
 #include <stdint.h>
 
@@ -9,6 +10,7 @@ typedef enum {
 	OP_RETURN,
 	OP_CONSTANT,
 	OP_CONSTANT_LONG,
+	OP_NEGATE,
 } OpCode;
 
 typedef struct {
@@ -19,6 +21,7 @@ typedef struct {
 	uint8_t* code;
 	ValueArray constants;
 	int *lines;
+	MemoryPool *memoryPool;
 } Chunk;
 
 void initChunk(Chunk *chunk);

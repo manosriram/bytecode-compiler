@@ -1,5 +1,8 @@
 #include "chunk.h"
 #include "debug.h"
+#include "vm.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /*
 	1. Create a dynamic sizable array data-structure
@@ -27,20 +30,29 @@
 int main() {
 	Chunk chunk;
 	initChunk(&chunk);
+	initVM();
 
 	writeChunk(&chunk, OP_CONSTANT, 1);
 	writeChunk(&chunk, addConstant(&chunk, 1.4), 1);
 
-	for (int t=0;t<799;t++) {
-		writeChunk(&chunk, OP_CONSTANT_LONG, 1);
-		writeConstant(&chunk, t, 1);
-	}
+	writeChunk(&chunk, OP_CONSTANT_LONG, 1);
+	writeConstant(&chunk, 555, 1);
+
+	writeChunk(&chunk, OP_NEGATE, 1);
+
+	/* for (int t=0;t<799;t++) { */
+		/* writeChunk(&chunk, OP_CONSTANT_LONG, 1); */
+		/* writeConstant(&chunk, t, 1); */
+	/* } */
 
 	writeChunk(&chunk, OP_RETURN, 1);
 
-	disassembleChunk(&chunk, "test opcode");
+	/* disassembleChunk(&chunk, "test opcode"); */
+
+	interpret(&chunk);
 
 	freeChunk(&chunk);
+	freeVM();
 
 	return 0;
 }
